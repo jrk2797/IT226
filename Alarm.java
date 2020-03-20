@@ -7,7 +7,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 	import java.awt.event.ActionEvent;
-	import java.awt.event.ContainerListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ContainerListener;
 	import java.awt.event.KeyEvent;
 	import java.awt.event.KeyListener;
 	import java.awt.event.MouseListener;
@@ -20,9 +21,12 @@ import java.awt.GridLayout;
 	import javax.swing.JLabel;
 	import javax.swing.JOptionPane;
 	import javax.swing.JPanel;
-	import javax.swing.JTabbedPane;
-	import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 	import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 	/**
 	 * 
@@ -45,9 +49,13 @@ import java.awt.GridLayout;
 		
 		
 		private static JFrame frame = null;
+		static int size = 3;
 		static String time = null;
 		static String date = null;
-		static String title = null;
+		static JTable table = null;
+		static String optMsg = null;
+		static String name = null;
+		static DefaultTableModel model = null;
 		static JButton addAlarm = new JButton("Add Alarm");
 		static JButton addAlarm2 = new JButton("Add Alarm2");
 		static JButton addAlarm3 = new JButton("Add Alarm3");
@@ -57,6 +65,8 @@ import java.awt.GridLayout;
 		static JTextField timeInput = null;
 		static JTextField nameInput = null;
 		static JTextField msgInput = null;
+		static String [][] data = {};
+		static String [] columnNames = {"Name","Date","Time","Title"};
 		static GridBagLayout grid = new GridBagLayout();
 		static GridBagConstraints c = new GridBagConstraints();
 		public Alarm()
@@ -68,13 +78,14 @@ import java.awt.GridLayout;
 			//panel1.setLayout(new GridLayout());
 			tabbedPane.addTab("Set Alarm", Add());
 			tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
-			tabbedPane.addTab("Alarms", Energy());
+			tabbedPane.addTab("Alarms", Alarms());
 			tabbedPane.setMnemonicAt(0, KeyEvent.VK_2);
 			//panel1.setLayout(new GridLayout());
 			//GridBagConstraints c = new GridBagConstraints();
 			
 			//panel2.setLayout(new FlowLayout(FlowLayout.LEFT));
 			frame.add(tabbedPane);
+			addAlarm.addActionListener(new ButtonActionListener());
 			
 			
 		}
@@ -140,17 +151,41 @@ import java.awt.GridLayout;
 			
 			
 		}
-		private static JComponent Energy()
+		private static JComponent Alarms()
 		{
 			 panel2 = new JPanel();
-
+			 model = new DefaultTableModel();
+			 model.addColumn("Name");
+			 model.addColumn("Date");
+			 model.addColumn("Time");
+			 model.addColumn("Opt Msg");
+			 table = new JTable(model);
+			 table.setBounds(30, 40, 200, 300);
+			 JScrollPane sp = new JScrollPane(table);
+			 panel2.add(sp);
 			return panel2;
 			
 			
 		}
 		
 		
-		
+		class ButtonActionListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				
+				 name = nameInput.getText();
+				 date = dateInput.getText();
+				 time = timeInput.getText();
+				 optMsg = msgInput.getText();
+				Object [] newData = {name, date, time, optMsg};
+				model.addRow(newData);
+				//table.setModel(model);
+				//table.add
+				
+				
+			}
+		}
 		
 		    
 		
